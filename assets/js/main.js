@@ -1,3 +1,33 @@
+// /*=============== LOGIN VERIFICATION ===============*/
+// Check if user is logged in
+function checkLoginStatus() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  if (isLoggedIn !== 'true') {
+    // Redirect to login page if not logged in
+    window.location.href = 'login.html';
+    return;
+  }
+}
+
+// Logout function
+function logout() {
+  localStorage.removeItem('isLoggedIn');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('rememberMe');
+  window.location.href = 'login.html';
+}
+
+// Check login status when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  checkLoginStatus();
+  
+  // Add logout event listener
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', logout);
+  }
+});
+
 // /*=============== SHOW MENU ===============*/
 const navMenu = document.getElementById('nav-menu'),
       navToggle = document.getElementById('nav-toggle'),
