@@ -205,3 +205,19 @@ checkoutBtn.addEventListener('click', () => {
 
 // Initialize
 renderCart();
+
+/*=============== CHECKOUT SUCCESS ===============*/
+const success = document.getElementById('success-close'),
+      successModal = document.getElementById('cart-success'),
+      successClose = document.getElementById('success-close');
+
+// Show success modal when checkout is clicked
+checkoutBtn.addEventListener('click', () => {
+  successModal.style.display = 'flex';
+});
+
+// Close success modal
+successClose.addEventListener('click', () => {
+  successModal.style.display = 'none';
+});
+

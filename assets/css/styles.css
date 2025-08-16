@@ -216,6 +216,24 @@ align-items: center;
   margin-top: 15px;
   font-size: 1.2rem;
 }
+
+/* SUCCESS MODAL */
+.cart_success {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items:center;
+  justify-content:center;
+  z-index: 300;
+}
+.cart_success-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+}
 /* end */
 
 .nav_logo{
