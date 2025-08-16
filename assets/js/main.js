@@ -112,3 +112,96 @@ sr.reveal(`.contact_dam-1`, {delay: 1400, scale: 0, rotate: {z: 45},easing: 'eas
 sr.reveal(`.contact_dam-2`, {delay: 1800, scale: 0, rotate: {z: 45}, easing: 'ease-in-out'})
 sr.reveal(`.contact_dam-3`, {delay: 1600,  scale: 0, rotate: {z: 45}, easing: 'ease-in-out'})
 sr.reveal(`.contact_dam-4`, {delay: 2000, scale: 0, rotate: {z: 45}, easing: 'ease-in-out'})
+
+
+// -------------card section---------------
+// ================= CART SYSTEM =================
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+const cartCountEl = document.getElementById('cart-count');
+const cartPopup = document.getElementById('cart-popup');
+const cartItemsEl = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
+const cartIcon = document.getElementById('cart-icon');
+const closeCartBtn = document.getElementById('close-cart');
+const checkoutBtn = document.getElementById('checkout-btn');
+
+// Update Cart Count
+function updateCartCount() {
+  cartCountEl.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+// Render Cart
+function renderCart() {
+  cartItemsEl.innerHTML = '';
+  let total = 0;
+  cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+    cartItemsEl.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name} (₹${item.price})</span>
+        <div>
+          <button onclick="changeQuantity(${index}, -1)">-</button>
+          ${item.quantity}
+          <button onclick="changeQuantity(${index}, 1)">+</button>
+          <button onclick="removeItem(${index})">x</button>
+        </div>
+      </div>
+    `;
+  });
+  cartTotalEl.textContent = total;
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+}
+
+// Change Quantity
+function changeQuantity(index, change) {
+  cart[index].quantity += change;
+  if (cart[index].quantity <= 0) cart.splice(index, 1);
+  renderCart();
+}
+
+// Remove Item
+function removeItem(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
+
+// Add to Cart (for Order buttons)
+document.querySelectorAll('.order_button').forEach((btn, idx) => {
+  btn.addEventListener('click', () => {
+    const itemName = btn.parentElement.querySelector('.order_title').innerText;
+    const priceText = btn.parentElement.querySelector('.order_price').innerText.replace(/\D/g, '');
+    const price = parseInt(priceText);
+    
+    const existingItem = cart.find(item => item.name === itemName);
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ name: itemName, price: price, quantity: 1 });
+    }
+    renderCart();
+  });
+});
+
+// Open Cart Popup
+cartIcon.addEventListener('click', () => {
+  cartPopup.style.display = 'block';
+  renderCart();
+});
+
+// Close Cart Popup
+closeCartBtn.addEventListener('click', () => {
+  cartPopup.style.display = 'none';
+});
+
+// Checkout Simulation
+checkoutBtn.addEventListener('click', () => {
+  alert('Thank you for your order!');
+  cart = [];
+  renderCart();
+  cartPopup.style.display = 'none';
+});
+
+// Initialize
+renderCart();
